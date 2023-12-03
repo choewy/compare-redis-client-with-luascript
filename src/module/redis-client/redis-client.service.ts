@@ -37,7 +37,7 @@ export class RedisClientService implements OnApplicationBootstrap {
       return results;
     });
 
-    return timer.run();
+    return timer.run(`redis-client-all`);
   }
 
   async testByKey(key: TestDataKey) {
@@ -51,6 +51,6 @@ export class RedisClientService implements OnApplicationBootstrap {
       return JSON.parse((await this.redis.get(target.key)) ?? 'null');
     });
 
-    return timer.run();
+    return timer.run(`redis-client-${key}`);
   }
 }

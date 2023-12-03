@@ -46,7 +46,7 @@ export class RedisLuascriptService implements OnApplicationBootstrap {
       return results;
     });
 
-    return timer.run();
+    return timer.run(`redis-luascript-all`);
   }
 
   async testByKey(key: TestDataKey) {
@@ -59,6 +59,6 @@ export class RedisLuascriptService implements OnApplicationBootstrap {
       return await this.redis.executeLuascript(LuascriptCommand.Save, target.key, target.value);
     });
 
-    return timer.run();
+    return timer.run(`redis-luascript-${key}`);
   }
 }
