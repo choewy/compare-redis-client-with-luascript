@@ -1,4 +1,4 @@
-import { BadRequestException, Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 
 import { TestDataKey } from '@/common';
 
@@ -10,10 +10,6 @@ export class RedisLuascriptController {
 
   @Get(':key')
   async test(@Param('key') key: TestDataKey) {
-    if (Object.values(TestDataKey).includes(key) === false) {
-      throw new BadRequestException();
-    }
-
     return this.redisLuascriptService.test(key);
   }
 }
