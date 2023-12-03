@@ -5,18 +5,6 @@
 - NestJS
 - IoRedis
 
-## Test Data Keys
-
-```ts
-enum TestDataKey {
-  Coord = 'coord',
-  Weather = 'weather',
-  Stations = 'stations',
-  Sys = 'sys',
-  Main = 'main',
-}
-```
-
 ## APIs
 
 ### Redis Client Module
@@ -28,6 +16,16 @@ enum TestDataKey {
 
 - GET /redis-luascript : test all
 - GET /redis-luascript/:key : test by key
+
+```ts
+export enum TestKey {
+  Coord = 'coord',
+  Weather = 'weather',
+  Stations = 'stations',
+  Sys = 'sys',
+  Main = 'main',
+}
+```
 
 ## Analysis
 
