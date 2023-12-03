@@ -2,21 +2,21 @@ import axios from 'axios';
 
 const api = axios.create({ baseURL: 'http://localhost:3000' });
 
-const testAllWithRedisClient = async () => {
+const testWithRedisClient = async () => {
   return api
     .get('redis-client')
     .then((res) => res.data as { ms: number })
     .catch(() => ({ ms: 0 }));
 };
 
-const testAllWithRedisLuascript = async () => {
+const testWithRedisLuascript = async () => {
   return api
     .get('redis-luascript')
     .then((res) => res.data as { ms: number })
     .catch(() => ({ ms: 0 }));
 };
 
-const calculateAvgMsByTestAll = async (loop: number, test: () => Promise<{ ms: number }>) => {
+const calculateMs = async (loop: number, test: () => Promise<{ ms: number }>) => {
   let i = 0;
 
   const result = {
@@ -31,6 +31,8 @@ const calculateAvgMsByTestAll = async (loop: number, test: () => Promise<{ ms: n
 
     const res = await test();
 
+    result.total += res.ms;
+
     if (result.min > res.ms) {
       result.min = res.ms;
     }
@@ -38,8 +40,6 @@ const calculateAvgMsByTestAll = async (loop: number, test: () => Promise<{ ms: n
     if (result.max < res.ms) {
       result.max = res.ms;
     }
-
-    result.total += res.ms;
   }
 
   result.avg = result.total / loop;
@@ -48,17 +48,12 @@ const calculateAvgMsByTestAll = async (loop: number, test: () => Promise<{ ms: n
 };
 
 const main = async () => {
-  console.log('client', await calculateAvgMsByTestAll(1, testAllWithRedisClient));
-  console.log('luascript', await calculateAvgMsByTestAll(1, testAllWithRedisLuascript));
+  const loops = [1, 10, 100, 1000];
 
-  console.log('client', await calculateAvgMsByTestAll(10, testAllWithRedisClient));
-  console.log('luascript', await calculateAvgMsByTestAll(10, testAllWithRedisLuascript));
-
-  console.log('client', await calculateAvgMsByTestAll(100, testAllWithRedisClient));
-  console.log('luascript', await calculateAvgMsByTestAll(100, testAllWithRedisLuascript));
-
-  console.log('client', await calculateAvgMsByTestAll(1000, testAllWithRedisClient));
-  console.log('luascript', await calculateAvgMsByTestAll(1000, testAllWithRedisLuascript));
+  for (const loop of loops) {
+    console.log('client', await calculateMs(loop, testWithRedisClient));
+    console.log('luascript', await calculateMs(loop, testWithRedisLuascript));
+  }
 };
 
 main();
