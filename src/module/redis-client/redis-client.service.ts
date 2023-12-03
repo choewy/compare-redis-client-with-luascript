@@ -24,7 +24,7 @@ export class RedisClientService implements OnApplicationBootstrap {
       for (const key of keys) {
         const target = new TestData()[key]('redis-client');
 
-        await this.redis.set(target.key, JSON.stringify(target.value));
+        await this.redis.set(target.key, JSON.stringify(target.value, null, 2));
         const result = await this.redis.get(target.key);
 
         if (result == null) {

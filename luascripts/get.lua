@@ -4,10 +4,10 @@ if not key then
   return nil
 end
 
-local value = redis.call("GET", key)
+local result = redis.call("GET", key)
 
-if not value then
+if not result then
   return nil
 end
 
-return cjson.decode(value)
+return cjson.encode(cjson.decode(result))

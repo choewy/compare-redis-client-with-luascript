@@ -1,15 +1,15 @@
 import { Redis } from 'ioredis';
 
 export class RedisClient extends Redis {
-  async executeLuascript<T>(command: string, ...args: any[]) {
-    for (let i = 0; i < args.length; i++) {
-      if (typeof args[i] === 'object') {
-        args[i] = JSON.stringify(args[i]);
+  async executeLuascript<T>(command: string, ...argv: any[]) {
+    for (let i = 0; i < argv.length; i++) {
+      if (typeof argv[i] === 'object') {
+        argv[i] = JSON.stringify(argv[i]);
       }
     }
 
     try {
-      const result = await this[command](...args);
+      const result = await this[command](...argv);
 
       return JSON.parse(result) as T;
     } catch (e) {
