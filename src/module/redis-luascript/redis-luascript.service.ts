@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, OnApplicationBootstrap } from '@nestjs/common';
 
-import { RedisConfig, TestData, TestDataKey } from '@/common';
+import { RedisConfig, TestData, TestKey, Tester } from '@/common';
 import { RedisClient, RedisLuascriptOption, Timer } from '@/core';
 
 import { LuascriptCommand } from './enums';
@@ -27,13 +27,13 @@ export class RedisLuascriptService implements OnApplicationBootstrap {
   }
 
   async testAll() {
-    const keys = Object.values(TestDataKey);
+    const keys = Object.values(TestKey);
 
     const timer = new Timer(async () => {
       const results: object[] = [];
 
       for (const key of keys) {
-        const target = new TestData()[key]('redis-luascript');
+        const target = new TestData()[key](Tester.Luascript);
         const result = await this.redis.executeLuascript(LuascriptCommand.Save, target.key, target.value);
 
         if (result == null) {
@@ -49,12 +49,12 @@ export class RedisLuascriptService implements OnApplicationBootstrap {
     return timer.run(`redis-luascript-all`);
   }
 
-  async testByKey(key: TestDataKey) {
-    if (Object.values(TestDataKey).includes(key) === false) {
+  async testByKey(key: TestKey) {
+    if (Object.values(TestKey).includes(key) === false) {
       throw new BadRequestException();
     }
 
-    const target = new TestData()[key]('redis-luascript');
+    const target = new TestData()[key](Tester.Luascript);
     const timer = new Timer(async () => {
       return await this.redis.executeLuascript(LuascriptCommand.Save, target.key, target.value);
     });

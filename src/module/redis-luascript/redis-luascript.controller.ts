@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 
-import { TestDataKey } from '@/common';
+import { TestKey } from '@/common';
 
 import { RedisLuascriptService } from './redis-luascript.service';
 
@@ -14,7 +14,7 @@ export class RedisLuascriptController {
   }
 
   @Get(':key')
-  async testByKey(@Param('key') key: TestDataKey) {
+  async testByKey(@Param('key') key: TestKey) {
     return this.redisLuascriptService.testByKey(key);
   }
 }

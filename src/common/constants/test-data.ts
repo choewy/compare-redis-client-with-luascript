@@ -1,19 +1,17 @@
-import { TestDataKey } from './enums';
+import { TestKey, Tester } from './enums';
 import { TestProperty } from './types';
 
-export class TestData
-  implements Record<TestDataKey, (who: 'redis-client' | 'redis-luascript') => TestProperty<object>>
-{
-  coord(who: 'redis-client' | 'redis-luascript'): TestProperty<object> {
+export class TestData implements Record<TestKey, (tester: Tester) => TestProperty<object>> {
+  coord(tester: Tester): TestProperty<object> {
     return {
-      key: `coord:${who}`,
+      key: `coord:${tester}`,
       value: { lon: 139.01, lat: 35.02 },
     };
   }
 
-  weather(who: 'redis-client' | 'redis-luascript'): TestProperty<object> {
+  weather(tester: Tester): TestProperty<object> {
     return {
-      key: `weather:${who}`,
+      key: `weather:${tester}`,
       value: [
         {
           id: 800,
@@ -27,23 +25,23 @@ export class TestData
     };
   }
 
-  stations(who: 'redis-client' | 'redis-luascript'): TestProperty<object> {
+  stations(tester: Tester): TestProperty<object> {
     return {
-      key: `stations:${who}`,
+      key: `stations:${tester}`,
       value: { base: 'stations', id: 1907296, dt: 1485792967, name: 'Tawarano', cod: 200 },
     };
   }
 
-  sys(who: 'redis-client' | 'redis-luascript'): TestProperty<object> {
+  sys(tester: Tester): TestProperty<object> {
     return {
-      key: `sys:${who}`,
+      key: `sys:${tester}`,
       value: { message: 0.0025, country: 'JP', sunrise: 1485726240, sunset: 1485763863 },
     };
   }
 
-  main(who: 'redis-client' | 'redis-luascript'): TestProperty<object> {
+  main(tester: Tester): TestProperty<object> {
     return {
-      key: `main:${who}`,
+      key: `main:${tester}`,
       value: {
         temp: 285.514,
         pressure: 1013.75,
