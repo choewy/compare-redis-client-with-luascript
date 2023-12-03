@@ -8,8 +8,13 @@ import { RedisClientService } from './redis-client.service';
 export class RedisClientController {
   constructor(private readonly redisClientService: RedisClientService) {}
 
+  @Get()
+  async testAll() {
+    return this.redisClientService.testAll();
+  }
+
   @Get(':key')
-  async test(@Param('key') key: TestDataKey) {
-    return this.redisClientService.test(key);
+  async testByKey(@Param('key') key: TestDataKey) {
+    return this.redisClientService.testByKey(key);
   }
 }

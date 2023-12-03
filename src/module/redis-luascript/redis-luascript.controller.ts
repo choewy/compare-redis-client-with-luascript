@@ -8,8 +8,13 @@ import { RedisLuascriptService } from './redis-luascript.service';
 export class RedisLuascriptController {
   constructor(private readonly redisLuascriptService: RedisLuascriptService) {}
 
+  @Get()
+  async testAll() {
+    return this.redisLuascriptService.testAll();
+  }
+
   @Get(':key')
-  async test(@Param('key') key: TestDataKey) {
-    return this.redisLuascriptService.test(key);
+  async testByKey(@Param('key') key: TestDataKey) {
+    return this.redisLuascriptService.testByKey(key);
   }
 }

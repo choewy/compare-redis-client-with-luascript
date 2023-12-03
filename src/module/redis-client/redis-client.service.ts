@@ -15,7 +15,32 @@ export class RedisClientService implements OnApplicationBootstrap {
     await this.redis.connect();
   }
 
-  async test(key: TestDataKey) {
+  async testAll() {
+    const keys = Object.values(TestDataKey);
+
+    const timer = new Timer(async () => {
+      const results: object[] = [];
+
+      for (const key of keys) {
+        const target = new TestData()[key]('redis-client');
+
+        await this.redis.set(target.key, JSON.stringify(target.value));
+        const result = await this.redis.get(target.key);
+
+        if (result == null) {
+          continue;
+        }
+
+        results.push(JSON.parse(result));
+      }
+
+      return results;
+    });
+
+    return timer.run();
+  }
+
+  async testByKey(key: TestDataKey) {
     if (Object.values(TestDataKey).includes(key) === false) {
       throw new BadRequestException();
     }
